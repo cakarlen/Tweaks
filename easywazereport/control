@@ -1,0 +1,9 @@
+Package: com.yexc.wazeenhancements
+Name: WazeEnhancements
+Depends: mobilesubstrate
+Version: 1.1
+Architecture: iphoneos-arm
+Description: Enhancements for Waze
+Maintainer: Excalibur
+Author: Excalibur
+Section: Tweaks

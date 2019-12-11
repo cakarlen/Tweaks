@@ -1,0 +1,9 @@
+Package: com.yexc.twotaplock
+Name: TwoTapLock
+Depends: mobilesubstrate
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: Tap twice on SpringBoard to lock device
+Maintainer: Excalibur
+Author: Excalibur
+Section: Tweaks
