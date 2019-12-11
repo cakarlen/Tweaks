@@ -1,0 +1,9 @@
+Package: com.yexc.betterappswitcher
+Name: BetterAppSwitcher
+Depends: mobilesubstrate
+Version: 1.0
+Architecture: iphoneos-arm
+Description: Invoke AppSwitcher on iPhone X+ quicker
+Maintainer: Excalibur
+Author: Excalibur
+Section: Tweaks
