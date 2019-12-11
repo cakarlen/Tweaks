@@ -1,0 +1,9 @@
+Package: com.yexc.nojitter
+Name: NoJitter
+Depends: mobilesubstrate
+Version: 1.0
+Architecture: iphoneos-arm
+Description: Disables jitter and makes apps transparent when editing
+Maintainer: Excalibur
+Author: Excalibur
+Section: Tweaks

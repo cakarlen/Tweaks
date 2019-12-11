@@ -1,0 +1,9 @@
+Package: com.yexc.idleblur
+Name: IdleBlur
+Depends: mobilesubstrate
+Version: 1.0
+Architecture: iphoneos-arm
+Description: Blurs the screen when phone idles
+Maintainer: Excalibur
+Author: Excalibur
+Section: Tweaks
