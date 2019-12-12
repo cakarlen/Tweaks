@@ -23,6 +23,12 @@
 - (void)_chat_sendReadReceiptForAllMessages:(id)arg1;
 @end
 
+@interface CKChatInputController : NSObject
+@end
+
+@interface CKNotificationChatController : NSObject
+@end
+
 static id conversation;
 static id messagesController;
 static id actualApp;
@@ -93,6 +99,22 @@ static void notificationCallback(CFNotificationCenterRef center, void *observer,
 //    [[%c(IMChatRegistry) sharedInstance] _chat_sendReadReceiptForAllMessages:0];
 //    %orig;
 //}
+
+%end
+
+%hook CKChatInputController
+
+-(BOOL)_shouldSendTypingIndicatorDataForPluginIdentifier:(id)arg1 {
+    return NO;
+}
+
+%end
+
+%hook CKNotificationChatController
+
+-(void)setLocalUserIsComposing:(BOOL)arg1 withPluginBundleID:(id)arg2 typingIndicatorData:(id)arg3 {
+    return;
+}
 
 %end
 
