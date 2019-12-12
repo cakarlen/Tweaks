@@ -3,8 +3,5 @@
 */.theos
 
 */packages
-testlog/Tweak.xm
-testlog/TestLog.plist
-testlog/Makefile
-testlog/Headers/SBFluidSwitcherGestureManager.h
-testlog/control
+
+testlog/*
