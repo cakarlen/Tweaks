@@ -24,7 +24,7 @@
 %hook SBAppSwitcherOrbGestureSettings
 
 - (double)valueAlongDefaultForcePressCurveWithMinY:(double)arg1 progress:(double)arg2 fromHomeScreen:(BOOL)arg3 {
-    return %orig(5, arg2, arg3);
+    return %orig(0, arg2, arg3);
 }
 
 %end
@@ -32,11 +32,11 @@
 %hook SBAppSwitcherSettings
 
 - (void)setGridSwitcherSwipeUpNormalizedRubberbandedTranslationAtMinimumScale:(double)arg1 {
-    %orig(5);
+    %orig(0);
 }
 
 - (void)setGridSwitcherSwipeUpMinimumScale:(double)arg1 {
-    %orig(5);
+    %orig(0);
 }
 
 %end

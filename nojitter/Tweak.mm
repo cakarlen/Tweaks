@@ -1,27 +1,26 @@
-%hook SBIconColorSettings
-
-@interface SBIconColorSettings
--(BOOL)suppressJitter;
+@interface SBHIconSettings : NSObject
+- (void)setSuppressJitter:(BOOL)arg1;
 @end
 
--(BOOL)suppressJitter {
-    return YES;
+@interface SBIconImageView
+@property (nonatomic, assign, readwrite) CGFloat alpha;
+- (void)setJittering:(BOOL)arg1;
+@end
+
+%hook SBHIconSettings
+
+- (void)setSuppressJitter:(BOOL)arg1 {
+    %orig(YES);
 }
 
 %end
 
 %hook SBIconImageView
 
-@interface SBIconImageView
-@property (nonatomic, assign, readwrite) CGFloat alpha;
--(void)setJittering:(BOOL)arg1;
-@end
-
--(void)setJittering:(BOOL)arg1 {
+- (void)setJittering:(BOOL)arg1 {
     if (arg1) {
         self.alpha = 0.5;
-    }
-    if (!arg1) {
+    } else {
         self.alpha = 1.0;
     }
 }
