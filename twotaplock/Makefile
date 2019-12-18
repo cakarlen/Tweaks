@@ -8,7 +8,9 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = TwoTapLock
 
-TwoTapLock_FILES = Tweak.x
+TwoTapLock_FILES = Tweak.xm
 TwoTapLock_CFLAGS = -fobjc-arc
 
 include $(THEOS_MAKE_PATH)/tweak.mk
+SUBPROJECTS += twotaplockprefs
+include $(THEOS_MAKE_PATH)/aggregate.mk

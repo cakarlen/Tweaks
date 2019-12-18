@@ -21,6 +21,14 @@
 + (id)sharedInstance;
 
 - (void)_chat_sendReadReceiptForAllMessages:(id)arg1;
+-(void)_updateUnreadCountForChat:(id)arg1;
+-(void)_chat:(id)arg1 sendReadReceiptForMessages:(id)arg2;
+@end
+
+@interface IMChat : NSObject
+-(id)init;
+
+-(void)markAllMessagesAsRead;
 @end
 
 @interface CKChatInputController : NSObject
@@ -36,6 +44,8 @@ static id actualApp;
 static NSString *const kPreferencesDomain = @"com.yexc.messagesxi";
 static NSString *const kPreferencesPath   = @"/var/mobile/Library/Preferences/com.yexc.messagesxiprefs.plist";
 static NSString *nsNotificationString     = @"com.yexc.messagesxi/ReloadPrefs";
+static NSString *const tweakName          = @"[MessasgesXI]";
+#define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 
 static BOOL isEnabled;
 static BOOL isAnimated;
@@ -121,6 +131,7 @@ static void notificationCallback(CFNotificationCenterRef center, void *observer,
 %hook IMChatRegistry
 
 - (void)_chat_sendReadReceiptForAllMessages:(id)arg1 {
+    DLog(@"%@\t\t%@", tweakName, arg1);
     if (![messagesController isShowingConversationListController]) {
         return;
     } else {
