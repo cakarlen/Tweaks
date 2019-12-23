@@ -3,11 +3,12 @@ include $(THEOS)/makefiles/common.mk
 BUNDLE_NAME = MessagesXIPrefs
 ARCHS = arm64
 
-MessagesXIPrefs_FILES = YEXRootListController.m
+MessagesXIPrefs_FILES = MESRootListController.m
 MessagesXIPrefs_INSTALL_PATH = /Library/PreferenceBundles
 MessagesXIPrefs_FRAMEWORKS = UIKit
 MessagesXIPrefs_PRIVATE_FRAMEWORKS = Preferences
 MessagesXIPrefs_CFLAGS = -fobjc-arc
+MessagesXIPrefs_EXTRA_FRAMEWORKS = Cephei CepheiPrefs
 
 include $(THEOS_MAKE_PATH)/bundle.mk
 

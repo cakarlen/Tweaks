@@ -1,3 +1,10 @@
+#import <Cephei/HBPreferences.h>
+
+HBPreferences *preferences;
+
+static BOOL isEnabled;
+static BOOL notAnimated;
+
 @interface CKMessagesController : UISplitViewController
 - (void)_appStateChange:(id)arg1;
 - (BOOL)isShowingConversationListController;
@@ -41,30 +48,7 @@ static id conversation;
 static id messagesController;
 static id actualApp;
 
-static NSString *const kPreferencesDomain = @"com.yexc.messagesxi";
-static NSString *const kPreferencesPath   = @"/var/mobile/Library/Preferences/com.yexc.messagesxiprefs.plist";
-static NSString *nsNotificationString     = @"com.yexc.messagesxi/ReloadPrefs";
-static NSString *const tweakName          = @"[MessasgesXI]";
 #define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
-
-static BOOL isEnabled;
-static BOOL isAnimated;
-
-static void loadPrefs() {
-    NSMutableDictionary *preferences = [[NSMutableDictionary alloc] initWithContentsOfFile:kPreferencesPath];
-    
-    if(!preferences) {
-        isEnabled = YES;
-        isAnimated = NO;
-    } else {
-        isEnabled = [[preferences objectForKey:@"isEnabled"] boolValue];
-        isAnimated = [[preferences objectForKey:@"isAnimated"] boolValue];
-    }
-}
-
-static void notificationCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
-    loadPrefs();
-}
 
 %hook SMSApplication
 
@@ -85,7 +69,7 @@ static void notificationCallback(CFNotificationCenterRef center, void *observer,
 - (void)_appStateChange:(id)arg1 {
     if (isEnabled) {
         if (![self isShowingConversationListController]) {
-            if (isAnimated) {
+            if (notAnimated) {
                 [actualApp showTranscriptListNotAnimated];
             } else {
                 [actualApp showTranscriptList];
@@ -131,7 +115,6 @@ static void notificationCallback(CFNotificationCenterRef center, void *observer,
 %hook IMChatRegistry
 
 - (void)_chat_sendReadReceiptForAllMessages:(id)arg1 {
-    DLog(@"%@\t\t%@", tweakName, arg1);
     if (![messagesController isShowingConversationListController]) {
         return;
     } else {
@@ -142,6 +125,11 @@ static void notificationCallback(CFNotificationCenterRef center, void *observer,
 %end
 
 %ctor {
-    loadPrefs();
-    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, notificationCallback, (CFStringRef)nsNotificationString, NULL, CFNotificationSuspensionBehaviorCoalesce);
+    preferences = [[HBPreferences alloc] initWithIdentifier:@"com.yexc.messagesxiprefs"];
+    [preferences registerDefaults:@{
+        @"notAnimated": @YES
+    }];
+
+    [preferences registerBool:&isEnabled default:YES forKey:@"isEnabled"];
+    [preferences registerBool:&notAnimated default:YES forKey:@"notAnimated"];
 }

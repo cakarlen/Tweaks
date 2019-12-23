@@ -1,3 +1,10 @@
+#import <Cephei/HBPreferences.h>
+
+HBPreferences *preferences;
+
+static BOOL isEnabled;
+static NSInteger amountOfTaps;
+
 @interface SpringBoard : NSObject
 - (void)_simulateLockButtonPress;
 @end
@@ -7,28 +14,6 @@
 @end
 
 UITapGestureRecognizer *tapGesture;
-static NSString *const kPreferencesDomain = @"com.yexc.twotaplock";
-static NSString *const kPreferencesPath   = @"/var/mobile/Library/Preferences/com.yexc.twotaplock.plist";
-static NSString *nsNotificationString     = @"com.yexc.twotaplock/ReloadPrefs";
-
-static BOOL isEnabled;
-static CGFloat amountOfTaps;
-
-static void loadPrefs() {
-    NSMutableDictionary *preferences = [[NSMutableDictionary alloc] initWithContentsOfFile:kPreferencesPath];
-    
-    if(!preferences) {
-        isEnabled = YES;
-        amountOfTaps = [[preferences objectForKey:@"taps"] intValue];
-    } else {
-        isEnabled = [[preferences objectForKey:@"isEnabled"] boolValue];
-        amountOfTaps = [[preferences objectForKey:@"taps"] intValue];
-    }
-}
-
-static void notificationCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
-    loadPrefs();
-}
 
 %hook SBHomeScreenView
 
@@ -57,6 +42,11 @@ static void notificationCallback(CFNotificationCenterRef center, void *observer,
 %end
 
 %ctor {
-    loadPrefs();
-    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, notificationCallback, (CFStringRef)nsNotificationString, NULL, CFNotificationSuspensionBehaviorCoalesce);
+    preferences = [[HBPreferences alloc] initWithIdentifier:@"com.yexc.twotaplockprefs"];
+    [preferences registerDefaults:@{
+        @"amountOfTaps": @2
+    }];
+
+    [preferences registerBool:&isEnabled default:YES forKey:@"isEnabled"];
+    [preferences registerInteger:(NSInteger *)&amountOfTaps default:2 forKey:@"taps"];
 }

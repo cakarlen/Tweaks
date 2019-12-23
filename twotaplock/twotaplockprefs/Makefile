@@ -8,6 +8,7 @@ TwoTapLockPrefs_INSTALL_PATH = /Library/PreferenceBundles
 TwoTapLockPrefs_FRAMEWORKS = UIKit
 TwoTapLockPrefs_PRIVATE_FRAMEWORKS = Preferences
 TwoTapLockPrefs_CFLAGS = -fobjc-arc
+TwoTapLockPrefs_EXTRA_FRAMEWORKS = Cephei CepheiPrefs
 
 include $(THEOS_MAKE_PATH)/bundle.mk
 

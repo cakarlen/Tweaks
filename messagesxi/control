@@ -1,7 +1,7 @@
 Package: com.yexc.messagesxi
 Name: MessagesXI
-Depends: mobilesubstrate, ws.hbang.common (>= 1.2)
-Version: 0.0.1
+Depends: mobilesubstrate, ws.hbang.common (>= 1.13)
+Version: 1.0
 Architecture: iphoneos-arm
 Description: An awesome MobileSubstrate tweak!
 Maintainer: Excalibur

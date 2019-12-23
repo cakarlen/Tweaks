@@ -10,6 +10,7 @@ TWEAK_NAME = TwoTapLock
 
 TwoTapLock_FILES = Tweak.xm
 TwoTapLock_CFLAGS = -fobjc-arc
+TwoTapLock_EXTRA_FRAMEWORKS += Cephei
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 SUBPROJECTS += twotaplockprefs
