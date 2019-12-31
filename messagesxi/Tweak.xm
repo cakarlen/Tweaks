@@ -1,14 +1,10 @@
 #import <Cephei/HBPreferences.h>
 
+// Preferences variables
 HBPreferences *preferences;
-
 static BOOL isEnabled;
 static BOOL notAnimated;
-
-@interface CKMessagesController : UISplitViewController
-- (void)_appStateChange:(id)arg1;
-- (BOOL)isShowingConversationListController;
-@end
+static BOOL manualRead;
 
 @interface SMSApplication : UIApplication
 - (id)init;
@@ -16,7 +12,12 @@ static BOOL notAnimated;
 - (void)showTranscriptListNotAnimated;
 @end
 
+@interface IMChat : NSObject
+- (id)init;
+@end
+
 @interface CKConversation : NSObject
+@property (nonatomic,retain) IMChat *chat;
 - (id)init;
 
 - (void)setLocalUserIsTyping:(BOOL)arg1;
@@ -24,32 +25,46 @@ static BOOL notAnimated;
 - (BOOL)hasUnreadMessages;
 @end
 
+@interface CKMessagesController : UISplitViewController
+@property (nonatomic,retain) CKConversation *currentConversation;
+
+- (void)_appStateChange:(id)arg1;
+- (BOOL)isShowingConversationListController;
+@end
+
 @interface IMChatRegistry : NSObject
 + (id)sharedInstance;
 
 - (void)_chat_sendReadReceiptForAllMessages:(id)arg1;
--(void)_updateUnreadCountForChat:(id)arg1;
--(void)_chat:(id)arg1 sendReadReceiptForMessages:(id)arg2;
 @end
 
-@interface IMChat : NSObject
--(id)init;
-
--(void)markAllMessagesAsRead;
+@interface CKMessageEntryView : UIView
+- (BOOL)isSendingMessage;
 @end
 
 @interface CKChatInputController : NSObject
+@property (nonatomic,retain) CKMessageEntryView *entryView;
 @end
 
 @interface CKNotificationChatController : NSObject
 @end
 
+@interface CKNavbarCanvasViewController : NSObject
+@property UIView *view;
+@end
+
+// Get instances
 static id conversation;
 static id messagesController;
 static id actualApp;
+static id inputController;
+
+// Variables
+static BOOL didHitButton = NO;
 
 #define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 
+// Hook app to get object
 %hook SMSApplication
 
 - (id)init {
@@ -76,29 +91,20 @@ static id actualApp;
             }
         }
     }
-
+    
     %orig;
 }
-
-%end
-    
-%hook CKConversation
-
-- (id)init {
-    conversation = self;
-    return %orig;
-}
-
-//- (void)setLocalUserIsTyping:(BOOL)arg1 {
-//    [[%c(IMChatRegistry) sharedInstance] _chat_sendReadReceiptForAllMessages:0];
-//    %orig;
-//}
 
 %end
 
 %hook CKChatInputController
 
--(BOOL)_shouldSendTypingIndicatorDataForPluginIdentifier:(id)arg1 {
+-(id)init {
+    inputController = self;
+    return %orig;
+}
+
+- (BOOL)_shouldSendTypingIndicatorDataForPluginIdentifier:(id)arg1 {
     return NO;
 }
 
@@ -106,7 +112,7 @@ static id actualApp;
 
 %hook CKNotificationChatController
 
--(void)setLocalUserIsComposing:(BOOL)arg1 withPluginBundleID:(id)arg2 typingIndicatorData:(id)arg3 {
+- (void)setLocalUserIsComposing:(BOOL)arg1 withPluginBundleID:(id)arg2 typingIndicatorData:(id)arg3 {
     return;
 }
 
@@ -115,21 +121,65 @@ static id actualApp;
 %hook IMChatRegistry
 
 - (void)_chat_sendReadReceiptForAllMessages:(id)arg1 {
-    if (![messagesController isShowingConversationListController]) {
-        return;
+    if (isEnabled) {
+        if (manualRead) {
+            if (didHitButton) {
+                %orig;
+            }
+        } else {
+            %orig;
+        }
+        
+        if ([[inputController entryView] isSendingMessage]) {
+            %orig;
+        }
     } else {
         %orig;
     }
+    
+    //    if (![messagesController isShowingConversationListController]) {
+    //        return;
+    //    } else {
+    //        %orig(readArg);
+    //    }
 }
 
 %end
 
+%hook CKNavbarCanvasViewController
+
+- (void)loadView {
+    %orig;
+    
+    if (isEnabled) {
+        if (manualRead) {
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+            [button setTitle:@"Read" forState:UIControlStateNormal];
+            button.frame = CGRectMake(325, -25, 50, 100);
+            [button addTarget:self action:@selector(buttonPressed) forControlEvents:UIControlEventTouchUpInside];
+            [self.view addSubview:button];
+        }
+    }
+}
+
+%new
+- (void)buttonPressed {
+    didHitButton = YES;
+    [[%c(IMChatRegistry) sharedInstance] _chat_sendReadReceiptForAllMessages:[[messagesController currentConversation] chat]];
+    didHitButton = NO;
+}
+
+%end
+
+// Setup preferences
 %ctor {
     preferences = [[HBPreferences alloc] initWithIdentifier:@"com.yexc.messagesxiprefs"];
     [preferences registerDefaults:@{
-        @"notAnimated": @YES
+        @"notAnimated": @YES,
+        @"manualRead": @YES
     }];
-
+    
     [preferences registerBool:&isEnabled default:YES forKey:@"isEnabled"];
     [preferences registerBool:&notAnimated default:YES forKey:@"notAnimated"];
+    [preferences registerBool:&manualRead default:YES forKey:@"manualRead"];
 }
