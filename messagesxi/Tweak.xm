@@ -53,6 +53,10 @@ static BOOL manualRead;
 @property UIView *view;
 @end
 
+@interface CKMessageEntryViewController : UIInputViewController
+@property (nonatomic,readonly) CKMessageEntryView *entryView;
+@end
+
 // Get instances
 static id conversation;
 static id messagesController;
@@ -146,20 +150,22 @@ static BOOL didHitButton = NO;
 
 %end
 
-%hook CKNavbarCanvasViewController
+%hook CKMessageEntryViewController
 
-- (void)loadView {
+- (id)initWithEntryView:(id)arg1 {
     %orig;
     
     if (isEnabled) {
         if (manualRead) {
             UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
             [button setTitle:@"Read" forState:UIControlStateNormal];
-            button.frame = CGRectMake(325, -25, 50, 100);
+            button.frame = CGRectMake(135, 35, 40, 50); // Made specifically for iPhone X, 13.2.3 (may not be correct for all devices)
             [button addTarget:self action:@selector(buttonPressed) forControlEvents:UIControlEventTouchUpInside];
-            [self.view addSubview:button];
+            [arg1 addSubview:button];
         }
     }
+    
+    return self;
 }
 
 %new
