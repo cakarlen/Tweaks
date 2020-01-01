@@ -14,6 +14,8 @@ static BOOL manualRead;
 
 @interface IMChat : NSObject
 - (id)init;
+
+@property (getter=isGroupChat,nonatomic,readonly) BOOL groupChat;
 @end
 
 @interface CKConversation : NSObject
@@ -137,6 +139,10 @@ static BOOL didHitButton = NO;
         if ([[inputController entryView] isSendingMessage]) {
             %orig;
         }
+        
+        if ([[[messagesController currentConversation] chat] isGroupChat]) {
+            %orig;
+        }
     } else {
         %orig;
     }
@@ -150,22 +156,22 @@ static BOOL didHitButton = NO;
 
 %end
 
-%hook CKMessageEntryViewController
+%hook CKNavbarCanvasViewController
 
-- (id)initWithEntryView:(id)arg1 {
+- (void)loadView {
     %orig;
     
     if (isEnabled) {
         if (manualRead) {
-            UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-            [button setTitle:@"Read" forState:UIControlStateNormal];
-            button.frame = CGRectMake(135, 35, 40, 50); // Made specifically for iPhone X, 13.2.3 (may not be correct for all devices)
-            [button addTarget:self action:@selector(buttonPressed) forControlEvents:UIControlEventTouchUpInside];
-            [arg1 addSubview:button];
+            if (![[[messagesController currentConversation] chat] isGroupChat]) {
+                UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+                [button setTitle:@"Read" forState:UIControlStateNormal];
+                button.frame = CGRectMake(325, -25, 50, 100); // Made specifically for iPhone X, 13.2.3 (may not be correct for all devices)
+                [button addTarget:self action:@selector(buttonPressed) forControlEvents:UIControlEventTouchUpInside];
+                [self.view addSubview:button];
+            }
         }
     }
-    
-    return self;
 }
 
 %new
