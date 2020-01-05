@@ -10,12 +10,15 @@ static BOOL manualRead;
 - (id)init;
 - (void)showTranscriptList;
 - (void)showTranscriptListNotAnimated;
+- (_Bool)application:(id)arg1 didFinishLaunchingWithOptions:(id)arg2;
 @end
 
 @interface IMChat : NSObject
 - (id)init;
 
 @property (getter=isGroupChat,nonatomic,readonly) BOOL groupChat;
+
+-(unsigned long long)unreadMessageCount;
 @end
 
 @interface CKConversation : NSObject
@@ -78,6 +81,23 @@ static BOOL didHitButton = NO;
     return %orig;
 }
 
+- (_Bool)application:(id)arg1 didFinishLaunchingWithOptions:(id)arg2 {
+    if (isEnabled) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goBackToTranscript) name:UIApplicationWillEnterForegroundNotification object:nil];
+    }
+    
+    return %orig;
+}
+
+%new
+- (void)goBackToTranscript {
+    if (notAnimated) {
+        [actualApp showTranscriptListNotAnimated];
+    } else {
+        [actualApp showTranscriptList];
+    }
+}
+
 %end
 
 %hook CKMessagesController
@@ -85,20 +105,6 @@ static BOOL didHitButton = NO;
 - (id)init {
     messagesController = self;
     return %orig;
-}
-
-- (void)_appStateChange:(id)arg1 {
-    if (isEnabled) {
-        if (![self isShowingConversationListController]) {
-            if (notAnimated) {
-                [actualApp showTranscriptListNotAnimated];
-            } else {
-                [actualApp showTranscriptList];
-            }
-        }
-    }
-    
-    %orig;
 }
 
 %end
@@ -146,12 +152,6 @@ static BOOL didHitButton = NO;
     } else {
         %orig;
     }
-    
-    //    if (![messagesController isShowingConversationListController]) {
-    //        return;
-    //    } else {
-    //        %orig(readArg);
-    //    }
 }
 
 %end
@@ -163,7 +163,7 @@ static BOOL didHitButton = NO;
     
     if (isEnabled) {
         if (manualRead) {
-            if (![[[messagesController currentConversation] chat] isGroupChat]) {
+            if (![[[messagesController currentConversation] chat] isGroupChat] && ([[[messagesController currentConversation] chat] unreadMessageCount] != 0)) {
                 UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
                 [button setTitle:@"Read" forState:UIControlStateNormal];
                 button.frame = CGRectMake(325, -25, 50, 100); // Made specifically for iPhone X, 13.2.3 (may not be correct for all devices)
