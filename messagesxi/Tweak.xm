@@ -3,20 +3,21 @@
 // Preferences variables
 HBPreferences *preferences;
 static BOOL isEnabled;
+static BOOL pushTranscriptList;
 static BOOL notAnimated;
 static BOOL manualRead;
 
 @interface SMSApplication : UIApplication
 - (id)init;
+
 - (void)showTranscriptList;
 - (void)showTranscriptListNotAnimated;
 - (_Bool)application:(id)arg1 didFinishLaunchingWithOptions:(id)arg2;
 @end
 
 @interface IMChat : NSObject
-- (id)init;
-
 @property (getter=isGroupChat,nonatomic,readonly) BOOL groupChat;
+- (id)init;
 
 -(unsigned long long)unreadMessageCount;
 @end
@@ -47,6 +48,10 @@ static BOOL manualRead;
 - (BOOL)isSendingMessage;
 @end
 
+@interface CKNavigationBarCanvasView : UIView
+- (void)setRightItemView:(UIView *)arg1;
+@end
+
 @interface CKChatInputController : NSObject
 @property (nonatomic,retain) CKMessageEntryView *entryView;
 @end
@@ -55,11 +60,7 @@ static BOOL manualRead;
 @end
 
 @interface CKNavbarCanvasViewController : NSObject
-@property UIView *view;
-@end
-
-@interface CKMessageEntryViewController : UIInputViewController
-@property (nonatomic,readonly) CKMessageEntryView *entryView;
+@property (nonatomic,retain) CKNavigationBarCanvasView *canvasView;
 @end
 
 // Get instances
@@ -83,7 +84,9 @@ static BOOL didHitButton = NO;
 
 - (_Bool)application:(id)arg1 didFinishLaunchingWithOptions:(id)arg2 {
     if (isEnabled) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goBackToTranscript) name:UIApplicationWillEnterForegroundNotification object:nil];
+        if (pushTranscriptList) {
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goBackToTranscript) name:UIApplicationWillEnterForegroundNotification object:nil];
+        }
     }
     
     return %orig;
@@ -160,15 +163,15 @@ static BOOL didHitButton = NO;
 
 - (void)loadView {
     %orig;
-    
+
     if (isEnabled) {
         if (manualRead) {
             if (![[[messagesController currentConversation] chat] isGroupChat] && ([[[messagesController currentConversation] chat] unreadMessageCount] != 0)) {
                 UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
                 [button setTitle:@"Read" forState:UIControlStateNormal];
-                button.frame = CGRectMake(325, -25, 50, 100); // Made specifically for iPhone X, 13.2.3 (may not be correct for all devices)
                 [button addTarget:self action:@selector(buttonPressed) forControlEvents:UIControlEventTouchUpInside];
-                [self.view addSubview:button];
+                
+                [self.canvasView setRightItemView:button];
             }
         }
     }
@@ -187,11 +190,13 @@ static BOOL didHitButton = NO;
 %ctor {
     preferences = [[HBPreferences alloc] initWithIdentifier:@"com.yexc.messagesxiprefs"];
     [preferences registerDefaults:@{
+        @"pushTranscriptList": @YES,
         @"notAnimated": @YES,
         @"manualRead": @YES
     }];
     
     [preferences registerBool:&isEnabled default:YES forKey:@"isEnabled"];
+    [preferences registerBool:&pushTranscriptList default:YES forKey:@"pushTranscriptList"];
     [preferences registerBool:&notAnimated default:YES forKey:@"notAnimated"];
     [preferences registerBool:&manualRead default:YES forKey:@"manualRead"];
 }

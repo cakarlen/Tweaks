@@ -38,6 +38,20 @@
 			<key>defaults</key>
 			<string>com.yexc.messagesxiprefs</string>
 			<key>key</key>
+			<string>pushTranscriptList</string>
+			<key>label</key>
+			<string>Snap to conversation list</string>
+			<key>PostNotification</key>
+			<string>com.yexc.messagesxi/ReloadPrefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.yexc.messagesxiprefs</string>
+			<key>key</key>
 			<string>notAnimated</string>
 			<key>label</key>
 			<string>No Animation</string>
