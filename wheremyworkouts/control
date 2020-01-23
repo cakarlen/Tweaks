@@ -1,9 +1,9 @@
-Package: com.yexc.messagesxi
-Name: MessagesXI
+Package: com.yexc.wheremyworkouts
+Name: WhereMyWorkouts
 Depends: mobilesubstrate, ws.hbang.common (>= 1.13)
 Version: 1.0
 Architecture: iphoneos-arm
-Description: Add cool stuff to Messages
+Description: Tweak with Cephei
 Maintainer: Excalibur
 Author: Excalibur
 Section: Tweaks

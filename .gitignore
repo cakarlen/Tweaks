@@ -5,3 +5,5 @@
 */packages
 
 testlog/*
+
+*/__handlers__/*
