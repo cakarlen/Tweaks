@@ -33,8 +33,7 @@
     
     if ([[iconController iconManager] hasOpenFolder]) {
         NSLog(@"[FolderCloser] Has open folder!");
-        [[iconController iconManager] performSelector:@selector(triggerAutoFolderClose) withObject:nil afterDelay:1];
-        NSLog(@"[FolderCloser] Closing folder...");
+        [[iconController iconManager] performSelector:@selector(triggerAutoFolderClose) withObject:nil afterDelay:0];
     }
     
     return %orig;

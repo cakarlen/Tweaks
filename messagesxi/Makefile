@@ -1,6 +1,7 @@
 INSTALL_TARGET_PROCESSES = MobileSMS
-ARCHS = arm64
+ARCHS = arm64 arm64e
 FOR_RELEASE = 1
+TARGET = iphone:clang:13.0:11.0
 
 include $(THEOS)/makefiles/common.mk
 

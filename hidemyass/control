@@ -1,0 +1,9 @@
+Package: com.yexc.hidemyass
+Name: HideMyAss
+Depends: mobilesubstrate, ws.hbang.common (>= 1.13), preferenceloader, com.spark.libsparkapplist
+Version: 1.0
+Architecture: iphoneos-arm
+Description: Tweak with Cephei
+Maintainer: Excalibur
+Author: Excalibur
+Section: Tweaks

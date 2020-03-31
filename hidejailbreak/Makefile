@@ -1,16 +1,19 @@
 INSTALL_TARGET_PROCESSES = SpringBoard
-include $(THEOS)/makefiles/common.mk
 
+TARGET = iphone:clang:13.0:latest
 ARCHS = arm64
 PACKAGE_VERSION = 1.0
 
+include $(THEOS)/makefiles/common.mk
+
 TWEAK_NAME = HideJailbreak
-$(TWEAK_NAME)_FILES = Tweak.xm
-$(TWEAK_NAME)_CFLAGS = -fobjc-arc
-$(TWEAK_NAME)_FRAMEWORKS = UIKit
-$(TWEAK_NAME)_LIBRARIES = sparkapplist
+HideJailbreak_FILES = Tweak.xm
+HideJailbreak_CFLAGS = -fobjc-arc
+HideJailbreak_FRAMEWORKS = UIKit
+HideJailbreak_EXTRA_FRAMEWORKS = Cephei
+HideJailbreak_LIBRARIES = sparkapplist
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 
-SUBPROJECTS += hidejailbreak
+SUBPROJECTS += hidejailbreakprefs
 include $(THEOS_MAKE_PATH)/aggregate.mk

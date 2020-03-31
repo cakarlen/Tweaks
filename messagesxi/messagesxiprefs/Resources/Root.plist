@@ -52,11 +52,17 @@
 			<key>defaults</key>
 			<string>com.yexc.messagesxiprefs</string>
 			<key>key</key>
-			<string>notAnimated</string>
+			<string>hideTypingDots</string>
 			<key>label</key>
-			<string>No Animation</string>
+			<string>Hide typing indicator</string>
 			<key>PostNotification</key>
 			<string>com.yexc.messagesxi/ReloadPrefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Read options</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -74,11 +80,39 @@
 		</dict>
 		<dict>
 			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.yexc.messagesxiprefs</string>
+			<key>key</key>
+			<string>readGroupChat</string>
+			<key>label</key>
+			<string>Automatically read group chats</string>
+			<key>PostNotification</key>
+			<string>com.yexc.messagesxi/ReloadPrefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Actions</string>
+		</dict>
+		<dict>
+			<key>cell</key>
 			<string>PSButtonCell</string>
 			<key>label</key>
 			<string>Kill Messages</string>
 			<key>action</key>
 			<string>killMessages</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Clear unread chat plist</string>
+			<key>action</key>
+			<string>clearUnreadPlist</string>
 		</dict>
 	</array>
 	<key>title</key>

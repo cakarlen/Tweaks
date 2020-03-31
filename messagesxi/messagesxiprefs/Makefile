@@ -1,7 +1,7 @@
 include $(THEOS)/makefiles/common.mk
 
 BUNDLE_NAME = MessagesXIPrefs
-ARCHS = arm64
+ARCHS = arm64 arm64e
 
 MessagesXIPrefs_FILES = MESRootListController.m
 MessagesXIPrefs_INSTALL_PATH = /Library/PreferenceBundles

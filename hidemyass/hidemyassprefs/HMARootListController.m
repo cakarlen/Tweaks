@@ -1,22 +1,20 @@
-#include "yexcRootListController.h"
+#include "HMARootListController.h"
 #import "SparkAppListTableViewController.h"
 
 #include <spawn.h>
 
-@implementation yexcRootListController
+@implementation HMARootListController
 
 - (NSArray *)specifiers {
 	if (!_specifiers) {
-		_specifiers = [[self loadSpecifiersFromPlistName:@"Root" target:self] retain];
+		_specifiers = [self loadSpecifiersFromPlistName:@"Root" target:self];
 	}
 
 	return _specifiers;
 }
 
-- (void)selectHide
-{
-    // Replace "com.spark.notchlessprefs" and "excludedApps" with your strings
-    SparkAppListTableViewController* s = [[SparkAppListTableViewController alloc] initWithIdentifier:@"com.yexc.hidejailbreak" andKey:@"hide"];
+- (void)selectHide {
+    SparkAppListTableViewController *s = [[SparkAppListTableViewController alloc] initWithIdentifier:@"com.yexc.hidemyassprefs" andKey:@"hide"];
     
     [self.navigationController pushViewController:s animated:YES];
     self.navigationItem.hidesBackButton = FALSE;

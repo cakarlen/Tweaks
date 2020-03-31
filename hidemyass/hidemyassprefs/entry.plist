@@ -5,17 +5,17 @@
 	<key>entry</key>
 	<dict>
 		<key>bundle</key>
-		<string>HideJailbreak</string>
+		<string>HideMyAssPrefs</string>
 		<key>cell</key>
 		<string>PSLinkCell</string>
 		<key>detail</key>
-		<string>yexcRootListController</string>
+		<string>HMARootListController</string>
 		<key>icon</key>
 		<string>icon.png</string>
 		<key>isController</key>
 		<true/>
 		<key>label</key>
-		<string>HideJailbreak</string>
+		<string>HideMyAssPrefs</string>
 	</dict>
 </dict>
 </plist>

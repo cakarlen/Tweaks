@@ -1,0 +1,9 @@
+Package: com.yexc.hideswitcherview
+Name: HideSwitcherView
+Depends: mobilesubstrate
+Version: 1.0
+Architecture: iphoneos-arm
+Description: Hides AppSwitcher views for privacy
+Maintainer: Excalibur
+Author: Excalibur
+Section: Tweaks
