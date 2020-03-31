@@ -1,9 +1,0 @@
-Package: com.yexc.hidejailbreak
-Name: HideJailbreak
-Depends: mobilesubstrate
-Version: 1.0
-Architecture: iphoneos-arm
-Description: Testing hiding applications
-Maintainer: Excalibur
-Author: Excalibur
-Section: Tweaks

@@ -1,9 +1,0 @@
-Package: com.yexc.wheremyworkouts
-Name: WhereMyWorkouts
-Depends: mobilesubstrate, ws.hbang.common (>= 1.13)
-Version: 1.0
-Architecture: iphoneos-arm
-Description: Tweak with Cephei
-Maintainer: Excalibur
-Author: Excalibur
-Section: Tweaks

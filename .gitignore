@@ -1,8 +1,17 @@
 *.DS_Store
+
 */.theos
+
 */packages
+
 testlog/*
+
 */__handlers__/*
+
 hidejailbreak*
+
 inspectiveclog*
+
 messagesxi*
+
+wheremyworkouts*
